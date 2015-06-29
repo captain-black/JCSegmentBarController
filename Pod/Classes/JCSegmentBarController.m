@@ -12,7 +12,7 @@
 static const void *segmentBarControllerKey;
 static const void *segmentBarItemKey;
 
-const NSInteger kDisplayCount = 5;// 1 line can display 5 JCSegmentBarItem
+const NSInteger kDisplayCount = 5;// the 1 line can be completely displayed 5 JCSegmentBarItem
 
 @interface JCSegmentBarController ()<UICollectionViewDelegate, UICollectionViewDataSource>
 
@@ -125,20 +125,22 @@ static NSString * const reuseIdentifier = @"contentCellId";
 
 - (void)adjustSegmentBarContentOffset:(NSInteger)index
 {
-    CGFloat itemWidth = [UIScreen mainScreen].bounds.size.width/kDisplayCount;
-    CGFloat offsetX = 0;
-    
-    if (index <= floor(kDisplayCount/2)) {
-        offsetX = 0;
+    if (self.viewControllers.count > kDisplayCount) {
+        CGFloat itemWidth = [UIScreen mainScreen].bounds.size.width/kDisplayCount;
+        CGFloat offsetX = 0;
+        
+        if (index <= floor(kDisplayCount/2)) {
+            offsetX = 0;
+        }
+        else if (index >= (self.viewControllers.count - ceil(kDisplayCount/2))) {
+            offsetX = (self.viewControllers.count - kDisplayCount) * itemWidth;
+        }
+        else {
+            offsetX = (index - floor(kDisplayCount/2)) * itemWidth;
+        }
+        
+        [self.segmentBar setContentOffset:CGPointMake(offsetX, 0) animated:YES];
     }
-    else if (index >= (self.viewControllers.count - ceil(kDisplayCount/2))) {
-        offsetX = (self.viewControllers.count - kDisplayCount) * itemWidth;
-    }
-    else {
-        offsetX = (index - floor(kDisplayCount/2)) * itemWidth;
-    }
-    
-    [self.segmentBar setContentOffset:CGPointMake(offsetX, 0) animated:YES];
 }
 
 #pragma mark - UICollectionViewDelegate & UICollectionViewDataSource
