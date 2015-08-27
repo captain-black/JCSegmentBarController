@@ -12,13 +12,13 @@
 static const void *segmentBarControllerKey;
 static const void *segmentBarItemKey;
 
-const NSInteger kDisplayCount = 5;// the 1 line can be completely displayed 5 JCSegmentBarItem
-
 @interface JCSegmentBarController ()<UICollectionViewDelegate, UICollectionViewDataSource>
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 
 @property (nonatomic, assign) UIEdgeInsets contentInset;
+
+@property (nonatomic, assign) NSInteger itemCount;
 
 @end
 
@@ -30,6 +30,8 @@ static NSString * const reuseIdentifier = @"contentCellId";
 {
     if (self = [self init]) {
         self.viewControllers = viewControllers;
+        
+        self.itemCount = MIN(self.viewControllers.count, 5);// the 1 line can be completely displayed 5 JCSegmentBarItem
     }
     return self;
 }
@@ -114,8 +116,12 @@ static NSString * const reuseIdentifier = @"contentCellId";
     CGFloat duration = unSelectedItem ? 0.3f : 0.0f;
     
     [UIView animateWithDuration:duration animations:^{
-        selectedItem.transform = CGAffineTransformMakeScale(1.2, 1.2);
+        selectedItem.transform = CGAffineTransformMakeScale(1.1, 1.1);
         unSelectedItem.transform = CGAffineTransformIdentity;
+        
+        CGRect frame = self.segmentBar.bottomLineView.frame;
+        frame.origin.x = selectedItem.frame.origin.x + (selectedItem.frame.size.width - self.segmentBar.bottomLineView.frame.size.width)/2;
+        self.segmentBar.bottomLineView.frame = frame;
     }];
     
     self.selectedItem = selectedItem;
@@ -125,18 +131,18 @@ static NSString * const reuseIdentifier = @"contentCellId";
 
 - (void)adjustSegmentBarContentOffset:(NSInteger)index
 {
-    if (self.viewControllers.count > kDisplayCount) {
-        CGFloat itemWidth = [UIScreen mainScreen].bounds.size.width/kDisplayCount;
+    if (self.viewControllers.count > self.itemCount) {
+        CGFloat itemWidth = [UIScreen mainScreen].bounds.size.width/self.itemCount;
         CGFloat offsetX = 0;
         
-        if (index <= floor(kDisplayCount/2)) {
+        if (index <= floor(self.itemCount/2)) {
             offsetX = 0;
         }
-        else if (index >= (self.viewControllers.count - ceil(kDisplayCount/2))) {
-            offsetX = (self.viewControllers.count - kDisplayCount) * itemWidth;
+        else if (index >= (self.viewControllers.count - ceil(self.itemCount/2))) {
+            offsetX = (self.viewControllers.count - self.itemCount) * itemWidth;
         }
         else {
-            offsetX = (index - floor(kDisplayCount/2)) * itemWidth;
+            offsetX = (index - floor(self.itemCount/2)) * itemWidth;
         }
         
         [self.segmentBar setContentOffset:CGPointMake(offsetX, 0) animated:YES];

@@ -17,6 +17,8 @@ typedef void (^JCSegmentBarItemSeletedBlock)(NSInteger index);
 @property (nonatomic, strong) UIColor *barTintColor;
 @property (nonatomic, strong) UIColor *selectedTintColor;
 
+@property (nonatomic, strong) UIView *bottomLineView;
+
 @property (nonatomic, assign) BOOL translucent;
 
 - (void)didSeletedSegmentBarItem:(JCSegmentBarItemSeletedBlock)seletedBlock;

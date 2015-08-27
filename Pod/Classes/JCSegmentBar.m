@@ -11,8 +11,6 @@
 #import "JCSegmentBarController.h"
 #import <KVOController/FBKVOController.h>
 
-extern const NSInteger kDisplayCount;
-
 @interface JCSegmentBar ()<UICollectionViewDelegate, UICollectionViewDataSource>
 
 @property (nonatomic, weak) JCSegmentBarController *segmentBarController;
@@ -49,8 +47,6 @@ static NSString * const reuseIdentifier = @"segmentBarItemId";
         self.tintColor = [UIColor darkGrayColor];
         self.selectedTintColor = [UIColor redColor];
         self.translucent = YES;
-        
-        self.itemWidth = [UIScreen mainScreen].bounds.size.width/kDisplayCount;
     }
     
     return self;
@@ -59,6 +55,8 @@ static NSString * const reuseIdentifier = @"segmentBarItemId";
 - (void)didMoveToSuperview
 {
     self.segmentBarController = (JCSegmentBarController *)[self jc_getViewController];
+    
+    self.itemWidth = [UIScreen mainScreen].bounds.size.width/MIN(self.segmentBarController.viewControllers.count, 5);
     
     CGFloat segmentBarWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat segmentBarHeight = 36.0f;
@@ -71,6 +69,24 @@ static NSString * const reuseIdentifier = @"segmentBarItemId";
     else {
         self.alpha = 1;
         self.frame = CGRectMake(0, 0, segmentBarWidth, segmentBarHeight);
+    }
+    
+    self.bottomLineView = [[UIView alloc] initWithFrame:CGRectMake((self.itemWidth-self.itemWidth*0.7)/2, self.frame.size.height-2, self.itemWidth*0.7, 2)];
+    self.bottomLineView.backgroundColor = self.selectedTintColor;
+    
+    [self addSubview:self.bottomLineView];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    if ([self viewWithTag:1001] == nil) {
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-0.5, self.contentSize.width, 0.5)];
+        lineView.backgroundColor = [UIColor lightGrayColor];
+        lineView.tag = 1001;
+        
+        [self addSubview:lineView];
     }
 }
 
