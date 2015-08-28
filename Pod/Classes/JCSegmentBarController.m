@@ -11,6 +11,7 @@
 
 static const void *segmentBarControllerKey;
 static const void *segmentBarItemKey;
+static const void *badgeValueKey;
 
 @interface JCSegmentBarController ()<UICollectionViewDelegate, UICollectionViewDataSource>
 
@@ -110,8 +111,13 @@ static NSString * const reuseIdentifier = @"contentCellId";
 
 - (void)selected:(JCSegmentBarItem *)selectedItem unSelected:(JCSegmentBarItem *)unSelectedItem
 {
-    selectedItem.titleLabel.textColor = self.segmentBar.selectedTintColor;
-    unSelectedItem.titleLabel.textColor = self.segmentBar.tintColor;
+    [self.segmentBar setSegmentBarItemTitle:unSelectedItem color:self.segmentBar.tintColor viewController:self.selectedViewController];
+    
+    self.selectedItem = selectedItem;
+    self.selectedIndex = selectedItem.tag;
+    self.selectedViewController = self.viewControllers[self.selectedIndex];
+    
+    [self.segmentBar setSegmentBarItemTitle:selectedItem color:self.segmentBar.selectedTintColor viewController:self.selectedViewController];
     
     CGFloat duration = unSelectedItem ? 0.3f : 0.0f;
     
@@ -123,10 +129,6 @@ static NSString * const reuseIdentifier = @"contentCellId";
         frame.origin.x = selectedItem.frame.origin.x + (selectedItem.frame.size.width - self.segmentBar.bottomLineView.frame.size.width)/2;
         self.segmentBar.bottomLineView.frame = frame;
     }];
-    
-    self.selectedItem = selectedItem;
-    self.selectedIndex = selectedItem.tag;
-    self.selectedViewController = self.viewControllers[self.selectedIndex];
 }
 
 - (void)adjustSegmentBarContentOffset:(NSInteger)index
@@ -200,5 +202,16 @@ static NSString * const reuseIdentifier = @"contentCellId";
 {
     return objc_getAssociatedObject(self, &segmentBarItemKey);
 }
+
+- (void)setBadgeValue:(NSString *)badgeValue
+{
+    objc_setAssociatedObject(self, &badgeValueKey, badgeValue, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (NSString *)badgeValue
+{
+    return objc_getAssociatedObject(self, &badgeValueKey);
+}
+
 
 @end

@@ -22,10 +22,13 @@
     
     JCViewController *vc1 = [storyboard instantiateViewControllerWithIdentifier:@"JCViewController"];
     vc1.title = @"fruit";
+    vc1.badgeValue = @"2";
     JCViewController *vc2 = [storyboard instantiateViewControllerWithIdentifier:@"JCViewController"];
     vc2.title = @"apple";
+    vc2.badgeValue = @"3";
     JCViewController *vc3 = [storyboard instantiateViewControllerWithIdentifier:@"JCViewController"];
     vc3.title = @"banana";
+    vc3.badgeValue = @"1";
     JCViewController *vc4 = [storyboard instantiateViewControllerWithIdentifier:@"JCViewController"];
     vc4.title = @"pomelo";
     JCViewController *vc5 = [storyboard instantiateViewControllerWithIdentifier:@"JCViewController"];

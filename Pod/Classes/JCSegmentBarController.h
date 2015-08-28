@@ -38,6 +38,8 @@
 
 @interface UIViewController (JCSegmentBarControllerItem)
 
+@property (nonatomic, copy) NSString *badgeValue;
+
 @property (nonatomic, strong, readonly) JCSegmentBarItem *segmentBarItem;
 @property (nonatomic, strong, readonly) JCSegmentBarController *segmentBarController;
 
