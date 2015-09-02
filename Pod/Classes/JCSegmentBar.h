@@ -22,6 +22,5 @@ typedef void (^JCSegmentBarItemSeletedBlock)(NSInteger index);
 @property (nonatomic, assign) BOOL translucent;
 
 - (void)didSeletedSegmentBarItem:(JCSegmentBarItemSeletedBlock)seletedBlock;
-- (void)setSegmentBarItemTitle:(JCSegmentBarItem *)item color:(UIColor *)color viewController:(UIViewController *)viewController;
 
 @end

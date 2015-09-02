@@ -61,7 +61,7 @@
 
 - (void)segmentBarController:(JCSegmentBarController *)segmentBarController didSelectItem:(JCSegmentBarItem *)item
 {
-    NSLog(@"%s: selectedIndex: %ld,title: %@", __func__, (long)segmentBarController.selectedIndex, item.titleLabel.text);
+    NSLog(@"%s: selectedIndex: %ld,title: %@", __func__, (long)segmentBarController.selectedIndex, item.title);
 }
 
 @end

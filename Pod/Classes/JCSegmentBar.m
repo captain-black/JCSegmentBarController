@@ -75,6 +75,8 @@ static NSString * const reuseIdentifier = @"segmentBarItemId";
     self.bottomLineView.backgroundColor = self.selectedTintColor;
     
     [self addSubview:self.bottomLineView];
+    
+    [self.segmentBarController settingsAssociatedObject];
 }
 
 - (void)layoutSubviews
@@ -109,17 +111,23 @@ static NSString * const reuseIdentifier = @"segmentBarItemId";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    UIViewController *vc = self.segmentBarController.viewControllers[indexPath.item];
+
     JCSegmentBarItem *item = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     item.tag = indexPath.item;
-    [self setSegmentBarItemTitle:item color:self.tintColor viewController:self.segmentBarController.viewControllers[indexPath.item]];
-    
-    if (self.segmentBarController.selectedItem == nil) {
-        [self.segmentBarController selected:item unSelected:nil];
+    item.badgeColor = self.selectedTintColor;
+ 
+    if (vc.badgeValue && ![vc.badgeValue isEqualToString:@""]) {
+        item.title = [NSString stringWithFormat:@"%@ %@", vc.title, vc.badgeValue];
     }
     else {
-        if (self.segmentBarController.selectedIndex == indexPath.item) {
-            [self.segmentBarController selected:self.segmentBarController.selectedItem unSelected:nil];
-        }
+        item.title = vc.title;
+    }
+    
+    item.textColor = self.tintColor;
+
+    if (self.segmentBarController.selectedItem == nil || self.segmentBarController.selectedIndex == indexPath.item) {
+        [self.segmentBarController selected:item unSelected:nil];
     }
     
     return item;
@@ -133,22 +141,6 @@ static NSString * const reuseIdentifier = @"segmentBarItemId";
 }
 
 #pragma mark -
-
-- (void)setSegmentBarItemTitle:(JCSegmentBarItem *)item color:(UIColor *)color viewController:(UIViewController *)viewController
-{
-    if (viewController.badgeValue && ![viewController.badgeValue isEqualToString:@""]) {
-        NSInteger length = viewController.badgeValue.length;
-        
-        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ %@", viewController.title, viewController.badgeValue]];
-        [attributedString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, attributedString.length-length)];
-        [attributedString addAttribute:NSForegroundColorAttributeName value:self.selectedTintColor range:NSMakeRange(attributedString.length-length, length)];
-        item.titleLabel.attributedText = attributedString;
-    }
-    else {
-        item.titleLabel.text = viewController.title;
-        item.titleLabel.textColor = color;
-    }
-}
 
 - (void)observeBarTintColor:(NSDictionary *)change
 {

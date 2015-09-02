@@ -10,6 +10,8 @@
 
 @interface JCSegmentBarItem : UICollectionViewCell
 
-@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, strong) UIColor *textColor;
+@property (nonatomic, strong) UIColor *badgeColor;
 
 @end

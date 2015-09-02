@@ -7,6 +7,14 @@
 //
 
 #import "JCSegmentBarItem.h"
+#import "JCSegmentBar.h"
+#import "JCSegmentBarController.h"
+
+@interface JCSegmentBarItem ()
+
+@property (nonatomic, strong) UILabel *titleLabel;
+
+@end
 
 @implementation JCSegmentBarItem
 
@@ -35,6 +43,32 @@
     [super prepareForReuse];
     
     self.titleLabel.text = @"";
+}
+
+#pragma mark -
+
+- (void)setTitle:(NSString *)title
+{
+    _title = title;
+    
+    self.titleLabel.text = title;
+}
+
+- (void)setTextColor:(UIColor *)textColor
+{
+    _textColor = textColor;
+    
+    NSInteger location = [self.title rangeOfString:@" "].location;
+    
+    if (location != NSNotFound) {
+        NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:self.title];
+        [attributedString addAttribute:NSForegroundColorAttributeName value:textColor range:NSMakeRange(0, location)];
+        [attributedString addAttribute:NSForegroundColorAttributeName value:self.badgeColor range:NSMakeRange(location+1, self.title.length-(location+1))];
+        self.titleLabel.attributedText = attributedString;
+    }
+    else {
+        self.titleLabel.textColor = textColor;
+    }
 }
 
 @end
