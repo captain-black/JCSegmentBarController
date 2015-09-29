@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "JCSegmentBarController"
-  s.version          = "0.0.5"
+  s.version          = "0.0.6"
   s.summary          = "Simple to use and support horizontally-scrolling."
   s.homepage         = "http://lijingcheng.github.io/"
   s.license          = 'MIT'

@@ -31,8 +31,6 @@ static NSString * const reuseIdentifier = @"contentCellId";
 {
     if (self = [self init]) {
         self.viewControllers = viewControllers;
-        
-        self.itemCount = MIN(self.viewControllers.count, 5);// the 1 line can be completely displayed 5 JCSegmentBarItem
     }
     return self;
 }
@@ -40,6 +38,8 @@ static NSString * const reuseIdentifier = @"contentCellId";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.itemCount = MIN(self.viewControllers.count, 5);// the 1 line can be completely displayed 5 JCSegmentBarItem
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     
