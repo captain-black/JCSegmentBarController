@@ -34,7 +34,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"%s: selectedIndex: %ld", __func__, (long)self.segmentBarController.selectedIndex);
+    NSLog(@"selectedIndex: %ld, badgeValue: %@, title: %@ title2: %@", (long)self.segmentBarController.selectedIndex, self.badgeValue, self.segmentBarItem.title, self.segmentBarController.selectedViewController.title);
 }
 
 @end

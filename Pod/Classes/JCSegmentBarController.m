@@ -30,7 +30,7 @@ static NSString * const reuseIdentifier = @"contentCellId";
 - (instancetype)initWithViewControllers:(NSArray *)viewControllers
 {
     if (self = [self init]) {
-        self.viewControllers = viewControllers;
+        _viewControllers = viewControllers;
     }
     return self;
 }
@@ -56,7 +56,6 @@ static NSString * const reuseIdentifier = @"contentCellId";
     self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.showsVerticalScrollIndicator = NO;
     self.collectionView.backgroundColor = [UIColor whiteColor];
-    self.collectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
     [self.view addSubview:self.collectionView];
     
@@ -71,14 +70,54 @@ static NSString * const reuseIdentifier = @"contentCellId";
     self.contentInset = UIEdgeInsetsMake(self.segmentBar.frame.origin.y + self.segmentBar.frame.size.height, 0, bottom, 0);
 }
 
-- (void)settingsAssociatedObject
+#pragma mark - UICollectionViewDelegate & UICollectionViewDataSource
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    for (int i = 0; i < self.viewControllers.count; i++) {
-        JCSegmentBarItem *item = (JCSegmentBarItem *)[self.segmentBar cellForItemAtIndexPath:[NSIndexPath indexPathForItem:i inSection:0]];
-        
-        objc_setAssociatedObject(self.viewControllers[i], &segmentBarItemKey, item, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-        objc_setAssociatedObject(self.viewControllers[i], &segmentBarControllerKey, self, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    return self.viewControllers.count;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return collectionView.frame.size;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    
+    UIScrollView *scrollView = (UIScrollView *)((UIViewController *)self.viewControllers[indexPath.item]).view;
+    scrollView.frame = cell.contentView.bounds;
+    scrollView.contentInset = self.contentInset;
+    
+    for (UIView *view in cell.contentView.subviews) {
+        [view removeFromSuperview];
     }
+    
+    [cell.contentView addSubview:scrollView];
+    
+    return cell;
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [self scrollToItemAtIndex:fabs(scrollView.contentOffset.x/scrollView.frame.size.width) animated:NO];
+}
+
+#pragma mark -
+
+- (void)associatedSegmentBarController
+{
+    for (UIViewController *vc in self.viewControllers) {
+        objc_setAssociatedObject(vc, &segmentBarControllerKey, self, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+}
+
+- (void)associatedSegmentItem:(JCSegmentBarItem *)item indexPath:(NSIndexPath *)indexPath
+{
+    objc_setAssociatedObject(self.viewControllers[indexPath.item], &segmentBarItemKey, item, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (JCSegmentBar *)segmentBar
@@ -148,45 +187,9 @@ static NSString * const reuseIdentifier = @"contentCellId";
     }
 }
 
-#pragma mark - UICollectionViewDelegate & UICollectionViewDataSource
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return self.viewControllers.count;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return collectionView.frame.size;
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    
-    UIScrollView *scrollView = (UIScrollView *)((UIViewController *)self.viewControllers[indexPath.item]).view;
-    scrollView.frame = cell.contentView.bounds;
-    scrollView.contentInset = self.contentInset;
-    
-    for (UIView *view in cell.contentView.subviews) {
-        [view removeFromSuperview];
-    }
-    
-    [cell.contentView addSubview:scrollView];
-    
-    return cell;
-}
-
-#pragma mark - UIScrollViewDelegate
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    [self scrollToItemAtIndex:fabs(scrollView.contentOffset.x/scrollView.frame.size.width) animated:NO];
-}
-
 @end
 
-#pragma mark - 
+#pragma mark - category
 
 @implementation UIViewController (JCSegmentBarControllerItem)
 
@@ -207,7 +210,7 @@ static NSString * const reuseIdentifier = @"contentCellId";
 
 - (NSString *)badgeValue
 {
-    return objc_getAssociatedObject(self, &badgeValueKey);
+    return objc_getAssociatedObject(self, &badgeValueKey) ? : @"";
 }
 
 @end

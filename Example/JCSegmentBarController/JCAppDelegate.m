@@ -43,10 +43,13 @@
     JCSegmentBarController *segmentBarController = [[JCSegmentBarController alloc] initWithViewControllers:@[vc1, vc2, vc3, vc4, vc5, vc6, vc7, vc8]];
     segmentBarController.title = @"JCSegmentBarController";
     segmentBarController.delegate = self;
+#warning 1
+    segmentBarController.selectedIndex = 1;
 //    segmentBarController.segmentBar.barTintColor = [UIColor yellowColor];
 //    segmentBarController.segmentBar.tintColor = [UIColor blueColor];
 //    segmentBarController.segmentBar.selectedTintColor = [UIColor purpleColor];
-//    segmentBarController.segmentBar.translucent = NO;
+#warning 2
+    segmentBarController.segmentBar.translucent = NO;
     
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:segmentBarController];
     nav.navigationBar.barTintColor = [UIColor orangeColor];

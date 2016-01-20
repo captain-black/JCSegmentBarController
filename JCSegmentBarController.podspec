@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "JCSegmentBarController"
-  s.version          = "0.0.6"
+  s.version          = "0.0.7"
   s.summary          = "Simple to use and support horizontally-scrolling."
   s.homepage         = "http://lijingcheng.github.io/"
   s.license          = 'MIT'
@@ -22,5 +22,4 @@ Pod::Spec.new do |s|
   s.resource_bundles = {
     'JCSegmentBarController' => ['Pod/Assets/*.png']
   }
-  s.dependency 'KVOController', '~> 1.0.3'
 end

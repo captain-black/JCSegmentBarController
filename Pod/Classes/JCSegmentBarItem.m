@@ -21,11 +21,11 @@
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        self.titleLabel = [[UILabel alloc] initWithFrame:self.bounds];
-        self.titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-        self.titleLabel.textAlignment = NSTextAlignmentCenter;
-        self.titleLabel.font = [UIFont systemFontOfSize:14.0f];
-        [self.contentView addSubview:self.titleLabel];
+        _title = @"";
+        _titleLabel = [[UILabel alloc] initWithFrame:self.bounds];
+        _titleLabel.textAlignment = NSTextAlignmentCenter;
+        _titleLabel.font = [UIFont systemFontOfSize:14.0f];
+        [self.contentView addSubview:_titleLabel];
     }
     
     return self;
@@ -58,16 +58,28 @@
 {
     _textColor = textColor;
     
+    [self changeTitleLabelTextColor];
+}
+
+- (void)setBadgeColor:(UIColor *)badgeColor
+{
+    _badgeColor = badgeColor;
+    
+    [self changeTitleLabelTextColor];
+}
+
+- (void)changeTitleLabelTextColor
+{
     NSInteger location = [self.title rangeOfString:@" "].location;
     
     if (location != NSNotFound) {
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:self.title];
-        [attributedString addAttribute:NSForegroundColorAttributeName value:textColor range:NSMakeRange(0, location)];
+        [attributedString addAttribute:NSForegroundColorAttributeName value:self.textColor range:NSMakeRange(0, location)];
         [attributedString addAttribute:NSForegroundColorAttributeName value:self.badgeColor range:NSMakeRange(location+1, self.title.length-(location+1))];
         self.titleLabel.attributedText = attributedString;
     }
     else {
-        self.titleLabel.textColor = textColor;
+        self.titleLabel.textColor = self.textColor;
     }
 }
 

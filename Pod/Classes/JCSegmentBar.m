@@ -9,7 +9,6 @@
 #import "JCSegmentBar.h"
 #import "JCSegmentBarItem.h"
 #import "JCSegmentBarController.h"
-#import <KVOController/FBKVOController.h>
 
 @interface JCSegmentBar ()<UICollectionViewDelegate, UICollectionViewDataSource>
 
@@ -18,6 +17,8 @@
 @property (nonatomic, copy) JCSegmentBarItemSeletedBlock seletedBlock;
 
 @property (nonatomic, assign) CGFloat itemWidth;
+
+@property (nonatomic, strong) UIView *lineView;
 
 @end
 
@@ -36,12 +37,9 @@ static NSString * const reuseIdentifier = @"segmentBarItemId";
     if (self = [super initWithFrame:frame collectionViewLayout:flowLayout]) {
         self.delegate = self;
         self.dataSource = self;
-        self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.showsHorizontalScrollIndicator = NO;
         self.showsVerticalScrollIndicator = NO;
         [self registerClass:[JCSegmentBarItem class] forCellWithReuseIdentifier:reuseIdentifier];
-        
-        [self.KVOController observe:self keyPath:@"barTintColor" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld action:@selector(observeBarTintColor:)];
         
         self.barTintColor = [UIColor colorWithRed:227/255.0f green:227/255.0f blue:227/255.0f alpha:1];
         self.tintColor = [UIColor darkGrayColor];
@@ -54,7 +52,7 @@ static NSString * const reuseIdentifier = @"segmentBarItemId";
 
 - (void)didMoveToSuperview
 {
-    self.segmentBarController = (JCSegmentBarController *)[self jc_getViewController];
+    self.segmentBarController = (JCSegmentBarController *)[self getViewController];
     
     self.itemWidth = [UIScreen mainScreen].bounds.size.width/MIN(self.segmentBarController.viewControllers.count, 5);
     
@@ -71,25 +69,19 @@ static NSString * const reuseIdentifier = @"segmentBarItemId";
         self.frame = CGRectMake(0, 0, segmentBarWidth, segmentBarHeight);
     }
     
-    self.bottomLineView = [[UIView alloc] initWithFrame:CGRectMake((self.itemWidth-self.itemWidth*0.7)/2, self.frame.size.height-2, self.itemWidth*0.7, 2)];
-    self.bottomLineView.backgroundColor = self.selectedTintColor;
-    
-    [self addSubview:self.bottomLineView];
-    
-    [self.segmentBarController settingsAssociatedObject];
+    self.bottomLineView.frame = CGRectMake((self.itemWidth-self.itemWidth*0.7)/2, self.frame.size.height-2, self.itemWidth*0.7, 2);
+
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored"-Wundeclared-selector"
+    [self.segmentBarController performSelector:@selector(associatedSegmentBarController) withObject:nil];
+    #pragma clang diagnostic pop
 }
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
     
-    if ([self viewWithTag:1001] == nil) {
-        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height-0.5, self.contentSize.width, 0.5)];
-        lineView.backgroundColor = [UIColor lightGrayColor];
-        lineView.tag = 1001;
-        
-        [self addSubview:lineView];
-    }
+    self.lineView.frame = CGRectMake(0, self.frame.size.height-0.5, self.contentSize.width, 0.5);
 }
 
 - (void)didSeletedSegmentBarItem:(JCSegmentBarItemSeletedBlock)seletedBlock
@@ -125,11 +117,16 @@ static NSString * const reuseIdentifier = @"segmentBarItemId";
     }
     
     item.textColor = self.tintColor;
-
-    if (self.segmentBarController.selectedItem == nil || self.segmentBarController.selectedIndex == indexPath.item) {
-        [self.segmentBarController selected:item unSelected:nil];
-    }
+   
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored"-Wundeclared-selector"
+    [self.segmentBarController performSelector:@selector(associatedSegmentItem:indexPath:) withObject:item withObject:indexPath];
     
+    if (self.segmentBarController.selectedItem == nil || self.segmentBarController.selectedIndex == indexPath.item) {
+        [self.segmentBarController performSelector:@selector(selected:unSelected:) withObject:item withObject:nil];
+    }
+    #pragma clang diagnostic pop
+
     return item;
 }
 
@@ -142,12 +139,39 @@ static NSString * const reuseIdentifier = @"segmentBarItemId";
 
 #pragma mark -
 
-- (void)observeBarTintColor:(NSDictionary *)change
+- (void)setBarTintColor:(UIColor *)barTintColor
 {
-    self.backgroundColor = self.barTintColor;
+    _barTintColor = barTintColor;
+    
+    self.backgroundColor = _barTintColor;
 }
 
-- (UIViewController *)jc_getViewController
+- (void)setSelectedTintColor:(UIColor *)selectedTintColor
+{
+    _selectedTintColor = selectedTintColor;
+    
+    if (!_bottomLineView) {
+        _bottomLineView = [[UIView alloc] initWithFrame:CGRectZero];
+        
+        [self addSubview:_bottomLineView];
+    }
+    
+    _bottomLineView.backgroundColor = _selectedTintColor;
+}
+
+- (UIView *)lineView
+{
+    if (!_lineView) {
+        _lineView = [[UIView alloc] initWithFrame:CGRectZero];
+        _lineView.backgroundColor = [UIColor lightGrayColor];
+        
+        [self addSubview:_lineView];
+    }
+    
+    return _lineView;
+}
+
+- (UIViewController *)getViewController
 {
     UIResponder *responder = [self nextResponder];
     

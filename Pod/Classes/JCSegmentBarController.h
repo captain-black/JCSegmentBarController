@@ -32,9 +32,6 @@
 
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated;
 
-- (void)selected:(JCSegmentBarItem *)selectedItem unSelected:(JCSegmentBarItem *)unSelectedItem;
-- (void)settingsAssociatedObject;
-
 @end
 
 @interface UIViewController (JCSegmentBarControllerItem)
