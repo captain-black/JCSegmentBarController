@@ -34,7 +34,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"selectedIndex: %ld, badgeValue: %@, title: %@ title2: %@", (long)self.segmentBarController.selectedIndex, self.badgeValue, self.segmentBarItem.title, self.segmentBarController.selectedViewController.title);
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    NSLog(@"selectedIndex: %ld, badgeValue: %@, segmentBarItem.title: %@ selectedViewController.title: %@", (long)self.segmentBarController.selectedIndex, self.badgeValue, self.segmentBarItem.title, self.segmentBarController.selectedViewController.title);
 }
 
 @end

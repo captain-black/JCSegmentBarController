@@ -44,7 +44,7 @@
     segmentBarController.title = @"JCSegmentBarController";
     segmentBarController.delegate = self;
 #warning 1
-    segmentBarController.selectedIndex = 1;
+    segmentBarController.selectedIndex = 2;
 //    segmentBarController.segmentBar.barTintColor = [UIColor yellowColor];
 //    segmentBarController.segmentBar.tintColor = [UIColor blueColor];
 //    segmentBarController.segmentBar.selectedTintColor = [UIColor purpleColor];

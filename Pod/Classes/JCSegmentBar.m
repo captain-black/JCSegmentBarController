@@ -121,12 +121,21 @@ static NSString * const reuseIdentifier = @"segmentBarItemId";
     #pragma clang diagnostic push
     #pragma clang diagnostic ignored"-Wundeclared-selector"
     [self.segmentBarController performSelector:@selector(associatedSegmentItem:indexPath:) withObject:item withObject:indexPath];
-    
-    if (self.segmentBarController.selectedItem == nil || self.segmentBarController.selectedIndex == indexPath.item) {
-        [self.segmentBarController performSelector:@selector(selected:unSelected:) withObject:item withObject:nil];
-    }
     #pragma clang diagnostic pop
 
+    NSInteger selectedIndex = self.segmentBarController.selectedIndex;
+    
+    if (self.segmentBarController.selectedItem) {
+        if (selectedIndex == indexPath.item) {
+            [self.segmentBarController scrollToItemAtIndex:selectedIndex animated:NO];
+        }
+    }
+    else {
+        if ((selectedIndex + 1) == indexPath.item) {
+            [self.segmentBarController scrollToItemAtIndex:selectedIndex animated:NO];
+        }
+    }
+    
     return item;
 }
 

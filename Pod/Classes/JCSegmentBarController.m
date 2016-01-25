@@ -129,16 +129,25 @@ static NSString * const reuseIdentifier = @"contentCellId";
     return _segmentBar;
 }
 
+- (void)setSelectedIndex:(NSUInteger)selectedIndex
+{
+    if (self.selectedItem) {
+        [self scrollToItemAtIndex:selectedIndex animated:NO];
+    }
+    
+    _selectedIndex = selectedIndex;
+}
+
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated
 {
-    if (index >= 0 && index < self.viewControllers.count && index != self.selectedIndex) {
+    if (index >= 0 && index < self.viewControllers.count && (index != self.selectedIndex || !self.selectedItem)) {
         JCSegmentBarItem *item = (JCSegmentBarItem *)[self.segmentBar cellForItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0]];
         
         [self selected:item unSelected:self.selectedItem];
         
         [self adjustSegmentBarContentOffset:index];
-        
-        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
+      
+        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:animated];
         
         if ([self.delegate respondsToSelector:@selector(segmentBarController:didSelectItem:)]) {
             [self.delegate segmentBarController:self didSelectItem:item];
@@ -162,8 +171,8 @@ static NSString * const reuseIdentifier = @"contentCellId";
         self.segmentBar.bottomLineView.frame = frame;
     }];
     
+    _selectedIndex = selectedItem.tag;
     self.selectedItem = selectedItem;
-    self.selectedIndex = selectedItem.tag;
     self.selectedViewController = self.viewControllers[self.selectedIndex];
 }
 
