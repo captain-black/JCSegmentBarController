@@ -45,6 +45,7 @@ static NSString * const reuseIdentifier = @"segmentBarItemId";
         self.tintColor = [UIColor darkGrayColor];
         self.selectedTintColor = [UIColor redColor];
         self.translucent = YES;
+        self.height = 36.0f;
     }
     
     return self;
@@ -57,16 +58,15 @@ static NSString * const reuseIdentifier = @"segmentBarItemId";
     self.itemWidth = [UIScreen mainScreen].bounds.size.width/MIN(self.segmentBarController.viewControllers.count, 5);
     
     CGFloat segmentBarWidth = [UIScreen mainScreen].bounds.size.width;
-    CGFloat segmentBarHeight = 36.0f;
     
     if (self.translucent) {
         self.alpha = 0.96;
         CGFloat y = [UIApplication sharedApplication].statusBarFrame.size.height + self.segmentBarController.navigationController.navigationBar.frame.size.height;
-        self.frame = CGRectMake(0, y, segmentBarWidth, segmentBarHeight);
+        self.frame = CGRectMake(0, y, segmentBarWidth, self.height);
     }
     else {
         self.alpha = 1;
-        self.frame = CGRectMake(0, 0, segmentBarWidth, segmentBarHeight);
+        self.frame = CGRectMake(0, 0, segmentBarWidth, self.height);
     }
     
     self.bottomLineView.frame = CGRectMake((self.itemWidth-self.itemWidth*0.7)/2, self.frame.size.height-2, self.itemWidth*0.7, 2);
