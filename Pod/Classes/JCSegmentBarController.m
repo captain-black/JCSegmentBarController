@@ -67,6 +67,11 @@ static NSString * const reuseIdentifier = @"contentCellId";
     self.navigationController.navigationBar.translucent = self.segmentBar.translucent;
     
     CGFloat bottom = self.tabBarController ? self.tabBarController.tabBar.frame.size.height : 0;
+    
+    if (!self.segmentBar.translucent) {
+        bottom += [UIApplication sharedApplication].statusBarFrame.size.height + self.navigationController.navigationBar.frame.size.height;
+    }
+    
     self.contentInset = UIEdgeInsetsMake(self.segmentBar.frame.origin.y + self.segmentBar.frame.size.height, 0, bottom, 0);
 }
 
@@ -129,13 +134,13 @@ static NSString * const reuseIdentifier = @"contentCellId";
     return _segmentBar;
 }
 
-- (void)setSelectedIndex:(NSUInteger)selectedIndex
+- (void)setSelectedIndex:(NSInteger)selectedIndex
 {
     if (self.selectedItem) {
         [self scrollToItemAtIndex:selectedIndex animated:NO];
     }
     
-    _selectedIndex = selectedIndex;
+    _selectedIndex = MIN(MAX(selectedIndex, 0), (self.viewControllers.count - 1));
 }
 
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated
