@@ -23,7 +23,6 @@
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		63E559EA6F33EB1B14E5FD94 /* libPods-Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D379BB3178AE8BE014588A /* libPods-Tests.a */; };
 		F372F9831B0F2F30004169D3 /* JCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F372F9821B0F2F30004169D3 /* JCViewController.m */; };
-		F38A5A3C1BCF5EE800433581 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F38A5A3B1BCF5EE800433581 /* Launch Screen.storyboard */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,7 +64,6 @@
 		BC6C1F7E771805C560F464FE /* libPods-JCSegmentBarController.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JCSegmentBarController.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F372F9811B0F2F30004169D3 /* JCViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JCViewController.h; sourceTree = "<group>"; };
 		F372F9821B0F2F30004169D3 /* JCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JCViewController.m; sourceTree = "<group>"; };
-		F38A5A3B1BCF5EE800433581 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		F8CDD1187FC5C3246B3642C4 /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -150,7 +148,6 @@
 				6003F596195388D20070C39A /* InfoPlist.strings */,
 				6003F599195388D20070C39A /* main.m */,
 				6003F59B195388D20070C39A /* JCSegmentBarController-Prefix.pch */,
-				F38A5A3B1BCF5EE800433581 /* Launch Screen.storyboard */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -278,7 +275,6 @@
 			files = (
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F5A1195388D20070C39A /* Main_iPhone.storyboard in Resources */,
-				F38A5A3C1BCF5EE800433581 /* Launch Screen.storyboard in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
