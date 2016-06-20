@@ -55,7 +55,7 @@ static NSString * const reuseIdentifier = @"segmentBarItemId";
 {
     self.segmentBarController = (JCSegmentBarController *)[self getViewController];
     
-    self.itemWidth = [UIScreen mainScreen].bounds.size.width/MIN(self.segmentBarController.viewControllers.count, 5);
+    self.itemWidth = [UIScreen mainScreen].bounds.size.width/MIN(MAX(1, self.segmentBarController.viewControllers.count), 5);
     
     CGFloat segmentBarWidth = [UIScreen mainScreen].bounds.size.width;
     
