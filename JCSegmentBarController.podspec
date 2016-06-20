@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.homepage         = "http://lijingcheng.github.io/"
   s.license          = 'MIT'
   s.author           = { "lijingcheng" => "bj_lijingcheng@163.com" }
-  s.source           = { :git => "https://github.com/lijingcheng/JCSegmentBarController.git", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/captain-black/JCSegmentBarController.git", :tag => s.version.to_s }
   s.social_media_url = 'http://weibo.com/lijingcheng1984'
   s.platform     = :ios, '7.0'
   s.requires_arc = true
